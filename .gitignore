@@ -1,2 +1,13 @@
+# convenience local direcories
 tmp
 lib_original
+
+# Eclipse project files
+.cache
+.classpath
+.project
+.settings/
+
+# outputs
+bin/
+
