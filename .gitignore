@@ -10,4 +10,5 @@ lib_original
 
 # outputs
 bin/
+dist/
 

@@ -1,6 +1,6 @@
 package net.moioli.packaging.example
 
-object MainExample {
+object Main {
 
   def main(args: Array[String]): Unit = {
     val ciao = "ciao"
