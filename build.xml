@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="dist" name="packaging-example">
+<project basedir="." default="all" name="packaging-example">
   
   <!-- Directories -->
-  <property name="dir-src-main" value="src/main/scala" />
-  <property name="dir-src-main-resources" value="src/main/resources" />
-  <property name="dir-lib" value="lib" />
-  <property name="dir-ant-lib" value="${dir-lib}/ant" />
-  <property name="dir-bin" value="bin" />
-  <property name="dir-dist" value="dist" />
+  <property name="src.dir" value="src/main/scala" />
+  <property name="src.resources.dir" value="src/main/resources" />
+  <property name="lib.dir" value="lib" />
+  <property name="ant.lib.dir" value="${lib.dir}/ant" />
+  <property name="bin.dir" value="bin" />
+  <property name="dist.dir" value="dist" />
 
   <!-- Other properties -->
-  <property name="class-main" value="net.moioli.packaging.example.Main" />
+  <property name="main.class" value="net.moioli.packaging.example.Main" />
 
   <!-- Load properties from file -->
   <property file="${basedir}/buildconf/build.properties" />
 
   <!-- Classpaths -->
-  <path id="classpath-build">
-    <fileset dir="${dir-lib}" includes="**/*.jar"/>
+  <path id="main.classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
-  <path id="classpath-ant">
-    <fileset dir="${dir-ant-lib}" includes="**/*.jar"/>
-    <fileset file="${dir-lib}/scala-library.jar"/>
-    <fileset file="${dir-lib}/scala-reflect.jar"/>
+  <path id="ant.classpath">
+    <fileset dir="${ant.lib.dir}" includes="**/*.jar"/>
+    <fileset file="${lib.dir}/scala-library.jar"/>
+    <fileset file="${lib.dir}/scala-reflect.jar"/>
   </path>
 
   <!-- Task definitions -->
-  <taskdef resource="scala/tools/ant/antlib.xml" classpathref="classpath-ant"/>
+  <taskdef resource="scala/tools/ant/antlib.xml" classpathref="ant.classpath"/>
 
   <!-- Clean binaries and jars -->
   <target name="clean">
-    <delete dir="${dir-bin}" />
-    <delete dir="${dir-dist}" />
+    <delete dir="${bin.dir}" />
+    <delete dir="${dist.dir}" />
   </target>
 
   <!-- Init -->
-  <target name="init-jar">
-    <mkdir dir="${dir-bin}" />
-    <copy includeemptydirs="false" todir="${dir-bin}">
-      <fileset dir="${dir-src-main}">
+  <target name="init" depends="clean">
+    <mkdir dir="${bin.dir}" />
+    <copy includeemptydirs="false" todir="${bin.dir}">
+      <fileset dir="${src.dir}">
         <exclude name="**/*.scala" />
       </fileset>
-      <fileset dir="${dir-src-main-resources}" />
+      <fileset dir="${src.resources.dir}" />
     </copy>
   </target>
 
   <!-- Build the code -->
-  <target name="build-jar" depends="init-jar">
-    <scalac srcdir="${dir-src-main}" destdir="${dir-bin}" includes="**/*.scala" classpathref="classpath-build" />
+  <target name="build" depends="init">
+    <scalac srcdir="${src.dir}" destdir="${bin.dir}" includes="**/*.scala" classpathref="main.classpath" />
   </target>
 
   <!-- Create jar file -->
-  <target name="dist-jar" depends="build-jar">
-    <mkdir dir="${dir-dist}" />
-    <jar destfile="${dir-dist}/${ant.project.name}-${version}.jar" basedir="${dir-bin}">
+  <target name="dist" depends="build">
+    <mkdir dir="${dist.dir}" />
+    <jar destfile="${dist.dir}/${ant.project.name}-${version}.jar" basedir="${bin.dir}">
       <manifest>
-        <attribute name="Main-Class" value="${class-main}" />
+        <attribute name="Main-Class" value="${main.class}" />
       </manifest>
     </jar>
   </target>
 
   <!-- Create a tar.bz2 archive containing the sources -->
   <target name="dist-sources">
-    <mkdir dir="${dir-dist}" />
-    <tar destfile="${dir-dist}/${ant.project.name}-${version}-sources.tar.bz2" compression="bzip2" longfile="gnu">
+    <mkdir dir="${dist.dir}" />
+    <tar destfile="${dist.dir}/${ant.project.name}-${version}-sources.tar.bz2" compression="bzip2" longfile="gnu">
       <tarfileset dir="${basedir}" prefix="${ant.project.name}-${version}">
         <include name="src/**" />
         <include name="lib/**" />
@@ -76,7 +76,7 @@
   </target>
 
   <!-- Meta target -->
-  <target name="dist" depends="clean, dist-jar, dist-sources">
+  <target name="all" depends="clean, dist, dist-sources">
     <echo message="Build finished" />
   </target>
 </project>
