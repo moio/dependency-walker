@@ -75,6 +75,7 @@ object Main extends SimpleSwingApplication {
     reactions += {
       case ButtonClicked(_) =>
         goButton.enabled = false
+        guiActor ! ClearGraph
         luke ! searchStringTextField.text
     }
   }
@@ -104,3 +105,5 @@ object Main extends SimpleSwingApplication {
     })
   }
 }
+
+case object ClearGraph

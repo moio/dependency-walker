@@ -3,11 +3,13 @@ package net.moioli.dependencywalker
 import java.awt.EventQueue
 
 import scala.actors.Actor
+import scala.collection.JavaConversions.collectionAsScalaIterable
 import scala.swing.Button
 
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout
 import edu.uci.ics.jung.graph.Graph
 import edu.uci.ics.jung.visualization.BasicVisualizationServer
+
 
 /**
  * Updates the GUI when new dependencies are received.
@@ -21,6 +23,9 @@ class GUIUpdaterActor(graph: Graph[Package, Dependency], panel: BasicVisualizati
 
     while (true) {
       receive {
+        case ClearGraph =>
+          (graph getEdges).toList.foreach(graph removeEdge _)
+          (graph getVertices).toList.foreach(graph removeVertex _)
         case result: Dependency =>
           runOnSwingThread(() => {
             graph addVertex result.from
