@@ -8,7 +8,7 @@ Input a query string and click on "Generate graph". The first package result on 
 
 _Trying with complex packages builds interesting results, eg. spring or hibernate._
 
-![Screenshot](/files/expand_arrow.JPG "Example screenshot")
+![Screenshot](doc/screenshot.png "Example screenshot")
 
 # Build From Sources
 
