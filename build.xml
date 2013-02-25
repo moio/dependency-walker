@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="all" name="packaging-example">
+<project basedir="." default="all" name="dependency-walker">
   
   <!-- Directories -->
   <property name="src.dir" value="src/main/scala" />
   <property name="src.resources.dir" value="src/main/resources" />
   <property name="lib.dir" value="lib" />
-  <property name="ant.lib.dir" value="${lib.dir}/ant" />
   <property name="bin.dir" value="bin" />
   <property name="dist.dir" value="dist" />
 
   <!-- Other properties -->
-  <property name="main.class" value="net.moioli.packaging.example.Main" />
+  <property name="main.class" value="net.moioli.dependencywalker.Main" />
 
   <!-- Load properties from file -->
   <property file="${basedir}/buildconf/build.properties" />
@@ -20,9 +19,7 @@
     <fileset dir="${lib.dir}" includes="**/*.jar"/>
   </path>
   <path id="ant.classpath">
-    <fileset dir="${ant.lib.dir}" includes="**/*.jar"/>
-    <fileset file="${lib.dir}/scala-library.jar"/>
-    <fileset file="${lib.dir}/scala-reflect.jar"/>
+    <fileset file="${lib.dir}/scala/*.jar"/>
   </path>
 
   <!-- Task definitions -->
@@ -70,7 +67,7 @@
         <include name="buildconf/**" />
         <include name="build.xml" />
         <include name="LICENSE" />
-        <include name="README.textile" />
+        <include name="README.md" />
       </tarfileset>
     </tar>
   </target>
