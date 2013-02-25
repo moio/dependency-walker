@@ -1,6 +1,7 @@
 # convenience local direcories
 tmp
 lib_original
+rpm
 
 # Eclipse project files
 .cache
